@@ -56,16 +56,16 @@ pygame.display.set_caption('flappy bird')
 
 
 # load img
-bg_img = pygame.image.load("flappybird/bg_day.png").convert_alpha()
-land_img = pygame.image.load("flappybird/land.png").convert_alpha()
+bg_img = pygame.image.load("../flappybird/bg_day.png").convert_alpha()
+land_img = pygame.image.load("../flappybird/land.png").convert_alpha()
 
 # load sound 0:wing 1:hit 2:die 3:point 4:swooshing
 bird_sounds = []
-bird_sounds.append(pygame.mixer.Sound("flappybird/flappybirdmusic/sfx_wing.ogg"))
-bird_sounds.append(pygame.mixer.Sound("flappybird/flappybirdmusic/sfx_hit.ogg"))
-bird_sounds.append(pygame.mixer.Sound("flappybird/flappybirdmusic/sfx_die.ogg"))
-bird_sounds.append(pygame.mixer.Sound("flappybird/flappybirdmusic/sfx_point.ogg"))
-bird_sounds.append(pygame.mixer.Sound("flappybird/flappybirdmusic/sfx_swooshing.ogg"))
+bird_sounds.append(pygame.mixer.Sound("../flappybird/flappybirdmusic/sfx_wing.ogg"))
+bird_sounds.append(pygame.mixer.Sound("../flappybird/flappybirdmusic/sfx_hit.ogg"))
+bird_sounds.append(pygame.mixer.Sound("../flappybird/flappybirdmusic/sfx_die.ogg"))
+bird_sounds.append(pygame.mixer.Sound("../flappybird/flappybirdmusic/sfx_point.ogg"))
+bird_sounds.append(pygame.mixer.Sound("../flappybird/flappybirdmusic/sfx_swooshing.ogg"))
 for i in bird_sounds:
     i.set_volume(0.1)
     
@@ -73,7 +73,7 @@ for i in bird_sounds:
 
 fonts = []
 for i in range(48, 58):
-    name = "flappybird/font_0" + str(i) + ".png"
+    name = "../flappybird/font_0" + str(i) + ".png"
     fonts.append(pygame.image.load(name).convert_alpha())
 def set_score():
     temp = str(score)
@@ -84,16 +84,16 @@ def set_score():
 # config bird
 
 bird_imgs = []
-bird_imgs.append(pygame.image.load("flappybird/bird0_0.png").convert_alpha())
-bird_imgs.append(pygame.image.load("flappybird/bird0_1.png").convert_alpha())
-bird_imgs.append(pygame.image.load("flappybird/bird0_2.png").convert_alpha())
+bird_imgs.append(pygame.image.load("../flappybird/bird0_0.png").convert_alpha())
+bird_imgs.append(pygame.image.load("../flappybird/bird0_1.png").convert_alpha())
+bird_imgs.append(pygame.image.load("../flappybird/bird0_2.png").convert_alpha())
 bird_pos = [100, 230]
 
 bird = Bird(bird_imgs, bird_sounds, bird_pos)
 
 # config pipe
 
-pipe_img = pygame.image.load("flappybird/pipes.png").convert_alpha()
+pipe_img = pygame.image.load("../flappybird/pipes.png").convert_alpha()
 
 pipe = []
 for i in range(3):
