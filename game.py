@@ -5,13 +5,14 @@ from pygame.locals import *
 
 
 # configure
+source_folder = "resource"
 screen_w = 288
 screen_h = 512
 
-# class bird
+
 class Bird(pygame.sprite.Sprite):
     def __init__(self, bird_img, bird_sounds, pos):
-        pygame.sprite.Sprite.__init__(self) 
+        pygame.sprite.Sprite.__init__(self)
         self.images = bird_img
         self.sounds = bird_sounds
         self.rect = self.images[0].get_rect()
@@ -20,22 +21,24 @@ class Bird(pygame.sprite.Sprite):
         self.a = 0.2
         self.angle = 0
         self.is_hit = False
+
     def move(self):
         self.rect.top += self.speed
         self.speed += self.a
         if self.speed >= 0:
             self.angle -= 2
+
     def click(self):
         self.sounds[0].play()
         self.speed = -4
         self.angle = 18
+
     def die(self):
         self.sounds[1].play()
         self.sounds[2].play()
         self.is_hit = True
-        
-            
-# class pipe
+
+
 class Pipe(pygame.sprite.Sprite):
     def __init__(self, pipe_img, pos, num):
         pygame.sprite.Sprite.__init__(self)
@@ -43,58 +46,73 @@ class Pipe(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.top = pos
         self.rect.left = 288 + 144*num
+
     def move(self):
-        self.rect.left -=1
+        self.rect.left -= 1
+
     def change(self):
         self.rect.left = 288
         self.rect.top = random.randint(-240, -100)
+
+
 # init the game
 pygame.init()
 pygame.mixer.init()
-screen = pygame.display.set_mode((screen_w,screen_h))
-pygame.display.set_caption('flappy bird')
+screen = pygame.display.set_mode((screen_w, screen_h))
+pygame.display.set_caption("flappy bird")
 
 
 # load img
-bg_img = pygame.image.load("../flappybird/bg_day.png").convert_alpha()
-land_img = pygame.image.load("../flappybird/land.png").convert_alpha()
+bg_img = pygame.image.load(source_folder + "/bg_day.png").convert_alpha()
+land_img = pygame.image.load(source_folder + "/land.png").convert_alpha()
 
 # load sound 0:wing 1:hit 2:die 3:point 4:swooshing
 bird_sounds = []
-bird_sounds.append(pygame.mixer.Sound("../flappybird/flappybirdmusic/sfx_wing.ogg"))
-bird_sounds.append(pygame.mixer.Sound("../flappybird/flappybirdmusic/sfx_hit.ogg"))
-bird_sounds.append(pygame.mixer.Sound("../flappybird/flappybirdmusic/sfx_die.ogg"))
-bird_sounds.append(pygame.mixer.Sound("../flappybird/flappybirdmusic/sfx_point.ogg"))
-bird_sounds.append(pygame.mixer.Sound("../flappybird/flappybirdmusic/sfx_swooshing.ogg"))
+bird_sounds.append(pygame.mixer.Sound(
+    source_folder + "/flappybirdmusic/sfx_wing.ogg"))
+bird_sounds.append(pygame.mixer.Sound(
+    source_folder + "/flappybirdmusic/sfx_hit.ogg"))
+bird_sounds.append(pygame.mixer.Sound(
+    source_folder + "/flappybirdmusic/sfx_die.ogg"))
+bird_sounds.append(pygame.mixer.Sound(
+    source_folder + "/flappybirdmusic/sfx_point.ogg"))
+bird_sounds.append(pygame.mixer.Sound(
+    source_folder + "/flappybirdmusic/sfx_swooshing.ogg"))
 for i in bird_sounds:
     i.set_volume(0.1)
-    
+
 # config fonts
 
 fonts = []
 for i in range(48, 58):
-    name = "../flappybird/font_0" + str(i) + ".png"
+    name = source_folder + "/font_0" + str(i) + ".png"
     fonts.append(pygame.image.load(name).convert_alpha())
+
+
 def set_score():
     temp = str(score)
     flag = len(temp)
-    for i in range(flag):     
+    for i in range(flag):
         screen.blit(fonts[int(temp[i])], (144 + i * 24 - 12 * flag, 20))
+
 
 if __name__ == '__main__':
 
     # config bird
     bird_imgs = []
-    bird_imgs.append(pygame.image.load("../flappybird/bird0_0.png").convert_alpha())
-    bird_imgs.append(pygame.image.load("../flappybird/bird0_1.png").convert_alpha())
-    bird_imgs.append(pygame.image.load("../flappybird/bird0_2.png").convert_alpha())
+    bird_imgs.append(pygame.image.load(
+        source_folder + "/bird0_0.png").convert_alpha())
+    bird_imgs.append(pygame.image.load(
+        source_folder + "/bird0_1.png").convert_alpha())
+    bird_imgs.append(pygame.image.load(
+        source_folder + "/bird0_2.png").convert_alpha())
     bird_pos = [100, 230]
 
     bird = Bird(bird_imgs, bird_sounds, bird_pos)
 
     # config pipe
 
-    pipe_img = pygame.image.load("../flappybird/pipes.png").convert_alpha()
+    pipe_img = pygame.image.load(source_folder + "/pipes.png").convert_alpha()
 
     pipe = []
     for i in range(3):
@@ -115,7 +133,7 @@ if __name__ == '__main__':
     pipe_delay_start = False
     while running:
         if not bird.is_hit:
-        # get event
+            # get event
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -157,8 +175,8 @@ if __name__ == '__main__':
                 pygame.quit()
                 exit()
     # image blit
-        screen.blit(bg_img,(-bg_x, 0))
-        screen.blit(bg_img,(screen_w-bg_x, 0))
+        screen.blit(bg_img, (-bg_x, 0))
+        screen.blit(bg_img, (screen_w-bg_x, 0))
         for i in range(3):
             screen.blit(pipe[i].image, pipe[i].rect)
         screen.blit(land_img, (-bg_x, 400))
