@@ -8,6 +8,7 @@ from pygame.locals import *
 source_folder = "resource"
 screen_w = 288
 screen_h = 512
+frame_rate = 60
 
 
 class Bird(pygame.sprite.Sprite):
@@ -45,13 +46,14 @@ class Pipe(pygame.sprite.Sprite):
         self.image = pipe_img
         self.rect = self.image.get_rect()
         self.rect.top = pos
-        self.rect.left = 288 + 144*num
+        self.rect.left = screen_w + screen_w*num/2
 
     def move(self):
         self.rect.left -= 1
 
     def change(self):
-        self.rect.left = 288
+        # reset pipe positon to right border
+        self.rect.left = screen_w
         self.rect.top = random.randint(-240, -100)
 
 
@@ -82,7 +84,6 @@ for i in bird_sounds:
     i.set_volume(0.1)
 
 # config fonts
-
 fonts = []
 for i in range(48, 58):
     name = source_folder + "/font_0" + str(i) + ".png"
@@ -111,9 +112,7 @@ if __name__ == '__main__':
     bird = Bird(bird_imgs, bird_sounds, bird_pos)
 
     # config pipe
-
     pipe_img = pygame.image.load(source_folder + "/pipes.png").convert_alpha()
-
     pipe = []
     for i in range(3):
         pipe_pos = random.randint(-260, -80)
@@ -161,20 +160,20 @@ if __name__ == '__main__':
                 if pipe_delay == 0:
                     pipe[pipe_flag].change()
                     pipe_flag = (pipe_flag + 1) % 3
-            clock.tick(60)
+            clock.tick(frame_rate)
             bird.move()
             for x in pipe:
                 x.move()
-    # game over
         else:
+            # game over
             if bird.rect.top <= 357:
                 bird.rect.top += 4
                 bird.angle += 3
-                clock.tick(60)
+                clock.tick(frame_rate)
             else:
                 pygame.quit()
                 exit()
-    # image blit
+        # image blit
         screen.blit(bg_img, (-bg_x, 0))
         screen.blit(bg_img, (screen_w-bg_x, 0))
         for i in range(3):
