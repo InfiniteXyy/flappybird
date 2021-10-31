@@ -1,7 +1,10 @@
 from sys import exit
 import random
 import pygame
-from pygame.locals import *
+# typings
+from typing import List, Tuple
+from pygame.mixer import Sound
+from pygame.locals import KEYDOWN
 
 
 # configure
@@ -12,7 +15,8 @@ frame_rate = 60
 
 
 class Bird(pygame.sprite.Sprite):
-    def __init__(self, bird_img, bird_sounds, pos):
+    rect: pygame.rect.Rect
+    def __init__(self, bird_img: List[pygame.surface.Surface], bird_sounds: List[Sound], pos: Tuple[int, int]):
         pygame.sprite.Sprite.__init__(self)
         self.images = bird_img
         self.sounds = bird_sounds
@@ -41,12 +45,13 @@ class Bird(pygame.sprite.Sprite):
 
 
 class Pipe(pygame.sprite.Sprite):
-    def __init__(self, pipe_img, pos, num):
+    rect: pygame.rect.Rect
+    def __init__(self, pipe_img: pygame.surface.Surface, pos: int, num: int):
         pygame.sprite.Sprite.__init__(self)
         self.image = pipe_img
         self.rect = self.image.get_rect()
         self.rect.top = pos
-        self.rect.left = screen_w + screen_w*num/2
+        self.rect.left = int(screen_w + screen_w*num/2)
 
     def move(self):
         self.rect.left -= 1
@@ -69,7 +74,7 @@ bg_img = pygame.image.load(source_folder + "/bg_day.png").convert_alpha()
 land_img = pygame.image.load(source_folder + "/land.png").convert_alpha()
 
 # load sound 0:wing 1:hit 2:die 3:point 4:swooshing
-bird_sounds = []
+bird_sounds: List[Sound] = []
 bird_sounds.append(pygame.mixer.Sound(
     source_folder + "/flappybirdmusic/sfx_wing.ogg"))
 bird_sounds.append(pygame.mixer.Sound(
@@ -84,7 +89,7 @@ for i in bird_sounds:
     i.set_volume(0.1)
 
 # config fonts
-fonts = []
+fonts: List[pygame.surface.Surface] = []
 for i in range(48, 58):
     name = source_folder + "/font_0" + str(i) + ".png"
     fonts.append(pygame.image.load(name).convert_alpha())
@@ -100,20 +105,20 @@ def set_score():
 if __name__ == '__main__':
 
     # config bird
-    bird_imgs = []
+    bird_imgs: List[pygame.surface.Surface] = []
     bird_imgs.append(pygame.image.load(
         source_folder + "/bird0_0.png").convert_alpha())
     bird_imgs.append(pygame.image.load(
         source_folder + "/bird0_1.png").convert_alpha())
     bird_imgs.append(pygame.image.load(
         source_folder + "/bird0_2.png").convert_alpha())
-    bird_pos = [100, 230]
+    bird_pos = (100, 230)
 
     bird = Bird(bird_imgs, bird_sounds, bird_pos)
 
     # config pipe
     pipe_img = pygame.image.load(source_folder + "/pipes.png").convert_alpha()
-    pipe = []
+    pipe: List[Pipe] = []
     for i in range(3):
         pipe_pos = random.randint(-260, -80)
         pipe.append(Pipe(pipe_img, pipe_pos, i))
@@ -177,7 +182,8 @@ if __name__ == '__main__':
         screen.blit(bg_img, (-bg_x, 0))
         screen.blit(bg_img, (screen_w-bg_x, 0))
         for i in range(3):
-            screen.blit(pipe[i].image, pipe[i].rect)
+            img = pipe[i].image
+            img and screen.blit(img, pipe[i].rect)
         screen.blit(land_img, (-bg_x, 400))
         screen.blit(land_img, (screen_w-bg_x, 400))
 
